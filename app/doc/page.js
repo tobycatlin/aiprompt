@@ -12,6 +12,7 @@ export default function Home() {
   const [context, setContext] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   // useEffect();
   useEffect(() => {
@@ -45,17 +46,25 @@ export default function Home() {
       body: JSON.stringify({ prompt, context, baseCV }),
     });
 
-    // if (!response.ok) {
-    //   throw new Error("Network response was not ok");
-    // }
+    if (!response.ok) {
+      return {
+        error: `Something went wrong - ${response.status} ${response.statusText}`,
+      };
+    }
 
     return response.json();
   };
 
   const handleSubmit = async () => {
     const message = await postPrompt();
-    setMessage(message.output.content);
-    localStorage.setItem("message", message.output.content);
+    if (message.error) {
+      setError(message.error);
+    } else {
+      setMessage(message.output.content);
+      setError(false);
+      localStorage.setItem("message", message.output.content);
+    }
+
     setLoading(false);
   };
 
@@ -128,7 +137,11 @@ export default function Home() {
               </Button>
             )}
           </Box>
-          <ReactMarkdown>{message}</ReactMarkdown>
+          {error ? (
+            <Typography>Error: {error}</Typography>
+          ) : (
+            <ReactMarkdown>{message}</ReactMarkdown>
+          )}
         </>
       ),
     },

@@ -100,7 +100,7 @@ export default function RootLayout({ children }) {
               {LINKS.map(({ text, href, icon: Icon }) => (
                 <ListItem key={href} disablePadding>
                   <ListItemButton component={Link} href={href}>
-                    <ListItemIcon>
+                    <ListItemIcon sx={{ minWidth: "35px" }}>
                       <Icon />
                     </ListItemIcon>
                     <ListItemText primary={text} />
