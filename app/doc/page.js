@@ -46,6 +46,7 @@ export default function Home() {
   // Handle posting text to api
   const postPrompt = async () => {
     setLoading(true);
+    setError(false);
     // console.log(JSON.stringify({ prompt, context, baseCV }));
     const response = await fetch("/api/ai", {
       method: "POST",
@@ -125,7 +126,8 @@ export default function Home() {
           </Typography>
           <Typography variant="body">
             The prompt provides the LLM instructions as to how it should combine
-            the CV and Job description inputs.
+            the CV and Job description inputs. You can format the prompt as if
+            you were instructing a person to do the task.
             <p>
               Examples: <br />
               <i>
@@ -180,7 +182,7 @@ export default function Home() {
               </Button>
             )}
           </Box>
-          {error ? (
+          {!loading && error ? (
             <Typography>Error: {error}</Typography>
           ) : (
             <ReactMarkdown>{message}</ReactMarkdown>
