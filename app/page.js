@@ -19,122 +19,24 @@ import TabSet from "./components/TabSet";
 // nextjs router
 // https://sdk.vercel.ai/docs/guides/frameworks/nextjs-app
 export default function Home() {
-  const [prompt, setPrompt] = useState("");
-  const [document, setDocument] = useState("");
-  const [context, setContext] = useState("");
-  const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
+  const page = `
+  # Overview
+  Junior developers encounter a multitude of challenges as they embark on the journey to
+  secure a job in the competitive tech industry. One of the primary hurdles they face is the
+  constraint of limited experience. Employers often prioritise candidates with hands-on
+  practical experience, creating a substantial barrier for those who are at the nascent stages of
+  their careers. This lack of real-world application can impede their ability to stand out in a
+  crowded job market.
+  Crafting an effective resume and cover letter further compounds the challenges faced by
+  junior developers. With limited work history to draw upon, they must skillfully emphasise
+  relevant projects, internships, and acquired skills. This process requires a delicate balance
+  between showcasing competence and addressing the inevitable gaps in experience, a task
+  that demands careful attention to detail.
+  
+  # Sprint Goal
+  This innovation sprint goal is to assess and iterate the potential of using Large Language
+  Models to increase the effectiveness of junior developer applications.
+`;
 
-  // useEffect();
-  useEffect(() => {
-    const storedContext = localStorage.getItem("context");
-    const storedPrompt = localStorage.getItem("prompt");
-    const storedDocument = localStorage.getItem("document");
-    // const storedMessage = localStorage.getItem("message");
-    console.log(storedDocument);
-    if (storedContext) setContext(storedContext);
-    if (storedPrompt) setPrompt(storedPrompt);
-    if (storedDocument) setDocument(storedDocument);
-    // if (storedMessage) setMessage(storedMessage);
-  }, []);
-
-  const textboxStyle = {
-    height: "100%",
-    // "& .MuiInputBase-root": {
-    //   height: "100%",
-    // },
-  };
-
-  // Handle posting text to api
-  const postPrompt = async () => {
-    setLoading(true);
-    console.log(JSON.stringify({ prompt, context, document }));
-    const response = await fetch("/api/ai", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ prompt, context, document }),
-    });
-
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-
-    return response.json();
-  };
-
-  const handleSubmit = async () => {
-    const message = await postPrompt();
-    setMessage(message.output.content);
-    localStorage.setItem("message", message.output.content);
-    setLoading(false);
-  };
-
-  const handleDocumentChange = (e) => {
-    setDocument(e.target.value);
-    localStorage.setItem("document", e.target.value);
-  };
-  const handleContextChange = (e) => {
-    setContext(e.target.value);
-    localStorage.setItem("context", e.target.value);
-  };
-  const handlePromptChange = (e) => {
-    setPrompt(e.target.value);
-    localStorage.setItem("prompt", e.target.value);
-  };
-
-  return (
-    <Grid container spacing={2} style={{ height: "100vh" }}>
-      {/* First Column */}
-      <Grid item xs={12} sm={6}>
-        {loading ? <Typography>Loading...</Typography> : null}
-        {loading ? null : <button onClick={handleSubmit}>Submit</button>}
-
-        <Paper style={{ height: "50%", overflow: "auto" }}>
-          <Typography>Result</Typography>
-          <ReactMarkdown>{message}</ReactMarkdown>
-        </Paper>
-        <Paper style={{ height: "50%", overflow: "auto" }}>
-          <Typography>CV Document</Typography>
-          <TextField
-            multiline
-            variant="outlined"
-            placeholder="Paste CV"
-            fullWidth
-            sx={textboxStyle}
-            onChange={handleDocumentChange}
-          />
-        </Paper>
-      </Grid>
-
-      {/* Second Column */}
-      <Grid item xs={12} sm={6}>
-        <Paper style={{ height: "50%", overflow: "auto" }}>
-          <Typography>Job Description</Typography>
-          <TextField
-            value={context}
-            multiline
-            variant="outlined"
-            placeholder="Paste Job description"
-            fullWidth
-            sx={textboxStyle}
-            onChange={handleContextChange}
-          />
-        </Paper>
-        <Paper style={{ height: "50%" }}>
-          <Typography>Prompt</Typography>
-          <TextField
-            value={prompt}
-            multiline
-            variant="outlined"
-            placeholder="Prompt"
-            fullWidth
-            sx={textboxStyle}
-            onChange={handlePromptChange}
-          />
-        </Paper>
-      </Grid>
-    </Grid>
-  );
+  return <ReactMarkdown>{page}</ReactMarkdown>;
 }

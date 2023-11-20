@@ -45,9 +45,9 @@ export default function Home() {
       body: JSON.stringify({ prompt, context, baseCV }),
     });
 
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
+    // if (!response.ok) {
+    //   throw new Error("Network response was not ok");
+    // }
 
     return response.json();
   };

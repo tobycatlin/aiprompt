@@ -15,6 +15,9 @@ const theme = createTheme({
       contrastText: "#000",
     },
   },
+  typography: {
+    fontFamily: ["Roboto Mono"].join(","),
+  },
 });
 
 export default theme;

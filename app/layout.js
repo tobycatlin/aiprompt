@@ -1,7 +1,6 @@
+import "@fontsource/roboto-mono";
 import "./globals.css";
-import { Inter } from "next/font/google";
 import ThemeRegistry from "../utils/ThemeRegistry";
-import { Roboto_Mono, Open_Sans } from "next/font/google";
 
 import Link from "next/link";
 import AppBar from "@mui/material/AppBar";
@@ -28,7 +27,7 @@ export const metadata = {
 
 const DRAWER_WIDTH = 150;
 
-const LINKS = [{ text: "Home", href: "/", icon: HomeIcon }];
+const LINKS = [{ text: "Generate", href: "/doc", icon: HomeIcon }];
 
 const PLACEHOLDER_LINKS = [
   { text: "Settings", icon: SettingsIcon },
@@ -36,22 +35,10 @@ const PLACEHOLDER_LINKS = [
   { text: "Logout", icon: LogoutIcon },
 ];
 
-const inter = Inter({ subsets: ["latin"] });
-const openSans = Open_Sans({
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const robotoMono = Roboto_Mono({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-roboto-mono",
-});
-
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={robotoMono.className}>
+    <html lang="en-GB">
+      <body>
         <ThemeRegistry options={{ key: "mui-theme" }}>
           <AppBar
             position="fixed"
@@ -66,6 +53,7 @@ export default function RootLayout({ children }) {
                 transition: "background 0.5s ease-in-out",
                 textShadow: "2px 4px 4px rgba(46,91,173,0.6)",
                 fontSize: "2rem",
+
                 // backgroundColor: "background.paper",
               }}
             >
