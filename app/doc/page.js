@@ -1,13 +1,22 @@
 "use client";
 import { useState, useEffect } from "react";
 
-import { Box, Typography, TextField, Grid, Paper } from "@mui/material";
+import {
+  Divider,
+  Box,
+  Typography,
+  TextField,
+  Grid,
+  Paper,
+} from "@mui/material";
 import ReactMarkdown from "react-markdown";
 import TabSet from "../components/TabSet";
 import Button from "@mui/material/Button";
 
 export default function Home() {
-  const [prompt, setPrompt] = useState("");
+  const [prompt, setPrompt] = useState(
+    "You will be provided with a cv document and a job description. Your task is to rewrite the document to match the job description and include addition information from the prompt."
+  );
   const [baseCV, setBaseCV] = useState("");
   const [context, setContext] = useState("");
   const [message, setMessage] = useState("");
@@ -86,6 +95,10 @@ export default function Home() {
       label: "CV",
       component: (
         <>
+          <Typography variant="h5" gutterBottom>
+            CV
+          </Typography>
+
           <TextField
             value={baseCV}
             multiline
@@ -102,7 +115,27 @@ export default function Home() {
       label: "Job Description",
       component: (
         <>
-          <Typography>Prompt</Typography>
+          <Typography
+            variant="h5"
+            sx={{
+              mt: 2,
+            }}
+          >
+            Prompt
+          </Typography>
+          <Typography variant="body">
+            The prompt provides the LLM instructions as to how it should combine
+            the CV and Job description inputs.
+            <p>
+              Examples: <br />
+              <i>
+                You will be provided with a cv document and a job description.
+                Your task is to rewrite the document to match the job
+                description
+              </i>
+            </p>
+          </Typography>
+
           <TextField
             value={prompt}
             multiline
@@ -112,7 +145,17 @@ export default function Home() {
             sx={textboxStyle}
             onChange={handlePromptChange}
           />
-          <Typography>Description</Typography>
+          <Divider />
+
+          <Typography
+            variant="h5"
+            sx={{
+              mt: 2,
+            }}
+          >
+            Job Description
+          </Typography>
+
           <TextField
             value={context}
             multiline

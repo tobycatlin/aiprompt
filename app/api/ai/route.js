@@ -4,11 +4,11 @@ export async function POST(request) {
   const body = await request.json();
   const { prompt, context, baseCV } = body;
   // console.log("request", prompt, context, baseCV);
-  const promptWithContext = `You will be provided with a cv document and a job description. Your task is to rewrite the document to match the job description and include addition information from the prompt. \n
-                              return response in markdown format \n
+  const promptWithContext = `Prompt:${prompt} \n
                               CV document """${baseCV}"""\n
                               Job description """${context}"""\n
-                              Prompt:${prompt}`;
+                              return response in markdown format \n
+                              `;
 
   const completion = await openai.chat.completions.create({
     messages: [{ role: "system", content: promptWithContext }],
