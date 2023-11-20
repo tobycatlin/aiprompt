@@ -20,6 +20,6 @@ export async function POST(request) {
   return Response.json({ output: theResponse }, { status: 200 });
 }
 
-export const config = {
-  type: "experimental-background",
-};
+// export const config = {
+//   type: "experimental-background",
+// };
