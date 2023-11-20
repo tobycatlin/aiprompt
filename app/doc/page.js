@@ -93,13 +93,71 @@ export default function Home() {
 
   const tabs = [
     {
+      label: "Prompt",
+      component: (
+        <>
+          <Typography
+            variant="h5"
+            sx={{
+              mt: 2,
+              mb: 2,
+            }}
+          >
+            Prompt
+          </Typography>
+          <Typography variant="body">
+            The prompt provides the LLM instructions as to how it should combine
+            the CV and Job description inputs. You can format the prompt as if
+            you were instructing a person to do the task.
+            <p>
+              Examples:
+              <ul>
+                <li>
+                  <i>
+                    You will be provided with a cv document and a job
+                    description. Your task is to rewrite the document to match
+                    the job description
+                  </i>
+                </li>
+                <li>
+                  <i>
+                    match the cv as closely as you can to to the job description
+                  </i>
+                </li>
+                <li>
+                  <i>take the existing CV and adapt it to the requirements</i>
+                </li>
+              </ul>
+            </p>
+          </Typography>
+
+          <TextField
+            value={prompt}
+            multiline
+            variant="outlined"
+            placeholder="Prompt"
+            fullWidth
+            sx={textboxStyle}
+            onChange={handlePromptChange}
+          />
+        </>
+      ),
+    },
+    {
       label: "CV",
       component: (
         <>
-          <Typography variant="h5" gutterBottom>
+          <Typography
+            variant="h5"
+            sx={{
+              my: 2,
+            }}
+          >
             CV
           </Typography>
-
+          <Typography variant="body">
+            The base CV document that can be used as an input
+          </Typography>
           <TextField
             value={baseCV}
             multiline
@@ -119,45 +177,14 @@ export default function Home() {
           <Typography
             variant="h5"
             sx={{
-              mt: 2,
-            }}
-          >
-            Prompt
-          </Typography>
-          <Typography variant="body">
-            The prompt provides the LLM instructions as to how it should combine
-            the CV and Job description inputs. You can format the prompt as if
-            you were instructing a person to do the task.
-            <p>
-              Examples: <br />
-              <i>
-                You will be provided with a cv document and a job description.
-                Your task is to rewrite the document to match the job
-                description
-              </i>
-            </p>
-          </Typography>
-
-          <TextField
-            value={prompt}
-            multiline
-            variant="outlined"
-            placeholder="Prompt"
-            fullWidth
-            sx={textboxStyle}
-            onChange={handlePromptChange}
-          />
-          <Divider />
-
-          <Typography
-            variant="h5"
-            sx={{
-              mt: 2,
+              my: 2,
             }}
           >
             Job Description
           </Typography>
-
+          {/* <Typography my={5} variant="body">
+            The job description
+          </Typography> */}
           <TextField
             value={context}
             multiline
@@ -185,7 +212,19 @@ export default function Home() {
           {!loading && error ? (
             <Typography>Error: {error}</Typography>
           ) : (
-            <ReactMarkdown>{message}</ReactMarkdown>
+            message && (
+              <>
+                <Typography
+                  variant="h5"
+                  sx={{
+                    mt: 2,
+                  }}
+                >
+                  Result
+                </Typography>
+                <ReactMarkdown>{message}</ReactMarkdown>
+              </>
+            )
           )}
         </>
       ),
