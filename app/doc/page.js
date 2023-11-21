@@ -192,9 +192,12 @@ export default function Home() {
             The base CV document that can be used as an input
           </Typography>
           <Box>
-            <p>Generate an example CV using ChatGPT</p>
+            <p>
+              Generate an example CV using prompt: "generate an bad example cv
+              for a junior frontend web developer"
+            </p>
             <Button variant="contained" onClick={generateCVExample}>
-              Generate CV
+              Generate Bad CV
             </Button>
           </Box>
 
