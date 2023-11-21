@@ -19,6 +19,9 @@ import HiveIcon from "@mui/icons-material/Hive";
 import SettingsIcon from "@mui/icons-material/Settings";
 import SupportIcon from "@mui/icons-material/Support";
 import LogoutIcon from "@mui/icons-material/Logout";
+import PlumbingIcon from "@mui/icons-material/Plumbing";
+import ArticleIcon from "@mui/icons-material/Article";
+import LightbulbIcon from "@mui/icons-material/Lightbulb";
 
 export const metadata = {
   title: "AI Prompt Tool",
@@ -27,7 +30,12 @@ export const metadata = {
 
 const DRAWER_WIDTH = 150;
 
-const LINKS = [{ text: "Generate", href: "/doc", icon: HomeIcon }];
+const LINKS = [
+  { text: "Home", href: "/", icon: HomeIcon },
+  { text: "Generate", href: "/tool", icon: PlumbingIcon },
+  { text: "Docs", href: "/doc", icon: ArticleIcon },
+  { text: "Prompt examples", href: "/prompts", icon: LightbulbIcon },
+];
 
 const PLACEHOLDER_LINKS = [
   { text: "Settings", icon: SettingsIcon },
