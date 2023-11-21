@@ -48,12 +48,32 @@ export default function Home() {
     setLoading(true);
     setError(false);
     // console.log(JSON.stringify({ prompt, context, baseCV }));
+
     const response = await fetch("/api/ai", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ prompt, context, baseCV }),
+    });
+
+    if (!response.ok) {
+      return {
+        error: `Something went wrong - ${response.status} ${response.statusText}`,
+      };
+    }
+
+    return response.json();
+  };
+
+  const getCVExample = async () => {
+    // console.log(JSON.stringify({ prompt, context, baseCV }));
+
+    const response = await fetch("/api/generate", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
 
     if (!response.ok) {
@@ -73,6 +93,19 @@ export default function Home() {
       setMessage(message.output.content);
       setError(false);
       localStorage.setItem("message", message.output.content);
+    }
+
+    setLoading(false);
+  };
+
+  const generateCVExample = async () => {
+    setBaseCV("Loading...");
+    const message = await getCVExample();
+    if (message.error) {
+      setError(message.error);
+    } else {
+      setBaseCV(message.output.content);
+      localStorage.setItem("baseCV", message.output.content);
     }
 
     setLoading(false);
@@ -158,6 +191,13 @@ export default function Home() {
           <Typography variant="body">
             The base CV document that can be used as an input
           </Typography>
+          <Box>
+            <p>Generate an example CV using ChatGPT</p>
+            <Button variant="contained" onClick={generateCVExample}>
+              Generate CV
+            </Button>
+          </Box>
+
           <TextField
             value={baseCV}
             multiline
