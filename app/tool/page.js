@@ -9,6 +9,8 @@ import {
   InputLabel,
   Grid,
   Paper,
+  Switch,
+  FormControlLabel,
 } from "@mui/material";
 import ReactMarkdown from "react-markdown";
 import TabSet from "../components/TabSet";
@@ -18,6 +20,8 @@ export default function Home() {
   const [prompt, setPrompt] = useState(
     "You will be provided with a cv document and a job description. Your task is to rewrite the document to match the job description and include addition information from the prompt."
   );
+  const [referenceCV, setReferenceResult] = useState(false);
+  const [showReference, setShowReference] = useState(false);
   const [baseCV, setBaseCV] = useState("");
   const [context, setContext] = useState("");
   const [message, setMessage] = useState("");
@@ -29,11 +33,13 @@ export default function Home() {
     const storedContext = localStorage.getItem("context");
     const storedPrompt = localStorage.getItem("prompt");
     const storedBaseCV = localStorage.getItem("baseCV");
+    const storedReferenceCV = localStorage.getItem("referenceCV");
     // const storedMessage = localStorage.getItem("message");
 
     if (storedContext) setContext(storedContext);
     if (storedPrompt) setPrompt(storedPrompt);
     if (storedBaseCV) setBaseCV(storedBaseCV);
+    if (storedReferenceCV) setReferenceResult(storedReferenceCV);
     // if (storedMessage) setMessage(storedMessage);
   }, []);
 
@@ -116,10 +122,23 @@ export default function Home() {
     setBaseCV(e.target.value);
     localStorage.setItem("baseCV", e.target.value);
   };
+
+  const handleRefDocumentSave = (e) => {
+    if (message && message != "") {
+      setReferenceResult(message);
+      localStorage.setItem("referenceCV", message);
+    }
+  };
+
+  const handleToggleChange = (event) => {
+    setShowReference(event.target.checked);
+  };
+
   const handleContextChange = (e) => {
     setContext(e.target.value);
     localStorage.setItem("context", e.target.value);
   };
+
   const handlePromptChange = (e) => {
     setPrompt(e.target.value);
     localStorage.setItem("prompt", e.target.value);
@@ -250,25 +269,93 @@ export default function Home() {
           <Box p={2}>
             {loading ? <Typography>Loading...</Typography> : null}
             {loading ? null : (
-              <Button variant="contained" onClick={handleSubmit}>
+              <Button sx={{ m: 2 }} variant="contained" onClick={handleSubmit}>
                 Generate
               </Button>
             )}
+
+            {message && message != "" && !loading && (
+              <>
+                {referenceCV && (
+                  <Button
+                    sx={{ m: 2 }}
+                    variant="contained"
+                    onClick={handleRefDocumentSave}
+                  >
+                    Save as Reference
+                  </Button>
+                )}
+
+                {referenceCV && (
+                  <FormControlLabel
+                    sx={{ m: 2 }}
+                    control={
+                      <Switch
+                        checked={showReference}
+                        onChange={handleToggleChange}
+                        color="primary"
+                      />
+                    }
+                    label="Show Reference"
+                  />
+                )}
+              </>
+            )}
           </Box>
+
           {!loading && error ? (
             <Typography>Error: {error}</Typography>
           ) : (
-            message && (
+            message &&
+            showReference && (
               <>
-                <Typography
-                  variant="h5"
-                  sx={{
-                    mt: 2,
-                  }}
-                >
-                  Result
-                </Typography>
-                <ReactMarkdown>{message}</ReactMarkdown>
+                <Grid container spacing={2}>
+                  <Grid item xs={6}>
+                    <Typography
+                      variant="h5"
+                      sx={{
+                        mt: 2,
+                      }}
+                    >
+                      Result
+                    </Typography>
+                    <ReactMarkdown>{message}</ReactMarkdown>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Typography
+                      variant="h5"
+                      sx={{
+                        mt: 2,
+                      }}
+                    >
+                      Reference Result
+                    </Typography>
+                    <ReactMarkdown>{referenceCV}</ReactMarkdown>
+                  </Grid>
+                </Grid>
+              </>
+            )
+          )}
+
+          {!loading && error ? (
+            <Typography>Error: {error}</Typography>
+          ) : (
+            message &&
+            !showReference && (
+              <>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <Typography
+                      variant="h5"
+                      sx={{
+                        mt: 2,
+                      }}
+                    >
+                      Result
+                    </Typography>
+                    <ReactMarkdown>{message}</ReactMarkdown>
+                  </Grid>
+                </Grid>
               </>
             )
           )}
