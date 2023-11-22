@@ -127,6 +127,7 @@ export default function Home() {
     if (message && message != "") {
       setReferenceResult(message);
       localStorage.setItem("referenceCV", message);
+      // setShowReference(true);
     }
   };
 
@@ -276,15 +277,13 @@ export default function Home() {
 
             {message && message != "" && !loading && (
               <>
-                {referenceCV && (
-                  <Button
-                    sx={{ m: 2 }}
-                    variant="contained"
-                    onClick={handleRefDocumentSave}
-                  >
-                    Save as Reference
-                  </Button>
-                )}
+                <Button
+                  sx={{ m: 2 }}
+                  variant="contained"
+                  onClick={handleRefDocumentSave}
+                >
+                  Save as Reference
+                </Button>
 
                 {referenceCV && (
                   <FormControlLabel
