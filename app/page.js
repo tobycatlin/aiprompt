@@ -24,6 +24,11 @@ export default function Home() {
   The input passed into a LLM is known as a prompt. The quality of the prompt is vital to get the desired output from the model. The prompt should be specific enough to guide the model towards the desired output, but not so specific that it limits the model’s ability to generate novel text. 
 
   Through experimentation the aim is to dertermine the key factors in defining prompts. How a prompt combined with the input a CV, Job description can generate different CV outputs. Documenting the inputs and results will help to iterate on the process and improve the results.
+  
+  # Stretch tasks
+  * Write a prompt that takes a CV as the context and generates a score from 1-10 based of a set of critiria
+  * Write a prompt that will take a list of job descriptions and a CV and return a list of scores for each job description
+  * Walk the dog
   `;
 
   return <ReactMarkdown>{page}</ReactMarkdown>;

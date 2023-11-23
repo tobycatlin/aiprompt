@@ -6,8 +6,8 @@ export async function GET(request) {
 
   const completion = await openai.chat.completions.create({
     messages: [{ role: "system", content: promptWithContext }],
-    // model: "gpt-3.5-turbo-1106",
-    model: "gpt-4",
+    model: "gpt-3.5-turbo-1106",
+    // model: "gpt-4",
   });
 
   const theResponse = completion.choices[0].message;

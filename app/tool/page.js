@@ -11,6 +11,7 @@ import {
   Paper,
   Switch,
   FormControlLabel,
+  Rating,
 } from "@mui/material";
 import ReactMarkdown from "react-markdown";
 import TabSet from "../components/TabSet";
@@ -26,6 +27,7 @@ export default function Home() {
   const [context, setContext] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [score, setScore] = useState(false);
   const [error, setError] = useState(false);
 
   // useEffect();
@@ -73,6 +75,24 @@ export default function Home() {
     return response.json();
   };
 
+  const postCVScore = async () => {
+    const response = await fetch("/api/score", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ context, baseCV }),
+    });
+
+    if (!response.ok) {
+      return {
+        error: `Something went wrong - ${response.status} ${response.statusText}`,
+      };
+    }
+
+    return response.json();
+  };
+
   const getCVExample = async () => {
     // console.log(JSON.stringify({ prompt, context, baseCV }));
 
@@ -93,16 +113,25 @@ export default function Home() {
   };
 
   const handleSubmit = async () => {
+    setMessage("");
     const message = await postPrompt();
+    const score = await postCVScore();
+
     if (message.error) {
       setError(message.error);
     } else {
       setMessage(message.output.content);
+      setScore(score.output.content);
       setError(false);
       localStorage.setItem("message", message.output.content);
     }
 
     setLoading(false);
+  };
+
+  const handleScore = async () => {
+    const message = await postCVScore();
+    console.log(message);
   };
 
   const generateCVExample = async () => {
@@ -145,9 +174,24 @@ export default function Home() {
     localStorage.setItem("prompt", e.target.value);
   };
 
+  const RatingComponent = (props) => {
+    const { display, scoreValue } = props;
+    if (!display || !scoreValue) {
+      return null;
+    } else {
+      // console.log(scoreValue);
+      return (
+        <>
+          {scoreValue}
+          <Rating name="customized-10" value={scoreValue} max={10} readOnly />
+        </>
+      );
+    }
+  };
+
   const tabs = [
     {
-      label: "CV",
+      label: "Document",
       component: (
         <>
           <Typography
@@ -224,9 +268,22 @@ export default function Home() {
             Prompt
           </Typography>
           <Typography variant="body">
-            The prompt provides the LLM instructions as to how it should combine
-            the CV and Job description inputs. You can format the prompt as if
-            you were instructing a person to do the task.
+            <p>
+              The prompt provides the LLM instructions as to how it should
+              combine the CV and Job description inputs. You can format the
+              prompt as if you were instructing a person to do the task.
+            </p>
+            <InputLabel htmlFor="prompt-field">Input Prompt:</InputLabel>
+            <TextField
+              id="prompt-field"
+              value={prompt}
+              multiline
+              variant="outlined"
+              placeholder="Prompt"
+              fullWidth
+              sx={textboxStyle}
+              onChange={handlePromptChange}
+            />
             <p>
               Examples:
               <ul>
@@ -245,21 +302,28 @@ export default function Home() {
                 <li>
                   <i>take the existing CV and adapt it to the requirements</i>
                 </li>
+                <li>
+                  <i>
+                    Make a cv for this job as if you were looking for a
+                    promotion. List most compatible I.T. skills. List
+                    transferable I.T. skills. Only list relevant I.T. work
+                    experience. Use the tone of a professional. Add a personal
+                    statement of someone who enjoys their job.
+                  </i>
+                </li>
+                <li>
+                  <i>
+                    As a junior developer, match the cv to the job description,
+                    as if you were applying to the job, Organise it as :
+                    Personal info, About me (include personal statement),
+                    Skills, professional experience, Education, others (hobbies,
+                    languages...), keep the CV in the tone of the original with
+                    a Action-Oriented Language
+                  </i>
+                </li>
               </ul>
             </p>
           </Typography>
-          <InputLabel htmlFor="prompt-field">Input Prompt:</InputLabel>
-
-          <TextField
-            id="prompt-field"
-            value={prompt}
-            multiline
-            variant="outlined"
-            placeholder="Prompt"
-            fullWidth
-            sx={textboxStyle}
-            onChange={handlePromptChange}
-          />
         </>
       ),
     },
@@ -277,6 +341,9 @@ export default function Home() {
 
             {message && message != "" && !loading && (
               <>
+                <Button sx={{ m: 2 }} variant="contained" onClick={handleScore}>
+                  Score
+                </Button>
                 <Button
                   sx={{ m: 2 }}
                   variant="contained"
@@ -308,6 +375,8 @@ export default function Home() {
             message &&
             showReference && (
               <>
+                <RatingComponent display={message != ""} scoreValue={score} />
+
                 <Grid container spacing={2}>
                   <Grid item xs={6}>
                     <Typography
@@ -342,6 +411,7 @@ export default function Home() {
             message &&
             !showReference && (
               <>
+                <RatingComponent display={message != ""} scoreValue={score} />
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
                     <Typography

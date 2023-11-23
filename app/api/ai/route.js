@@ -5,14 +5,15 @@ export async function POST(request) {
   const { prompt, context, baseCV } = body;
 
   const promptWithContext = `Prompt:${prompt} \n
-                             CV document """${baseCV}"""\n
-                             Job description """${context}"""\n
+                             CV document: """${baseCV}"""\n
+                             Job description: """${context}"""\n
                              return response in markdown format \n
                             `;
 
   const completion = await openai.chat.completions.create({
     messages: [{ role: "system", content: promptWithContext }],
     model: "gpt-3.5-turbo-1106",
+    // temperature: 0.9,
     // model: "gpt-4",
   });
 
