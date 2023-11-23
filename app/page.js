@@ -28,7 +28,7 @@ export default function Home() {
   # Stretch tasks
   * Write a prompt that takes a CV as the context and generates a score from 1-10 based of a set of critiria
   * Write a prompt that will take a list of job descriptions and a CV and return a list of scores for each job description
-  * Walk the dog
+
   `;
 
   return <ReactMarkdown>{page}</ReactMarkdown>;
